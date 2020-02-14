@@ -16,6 +16,7 @@ async function bootstrap() {
     .setTitle('个人后台')
     .setDescription('个人后台服务系统')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('swagger', app, document);
