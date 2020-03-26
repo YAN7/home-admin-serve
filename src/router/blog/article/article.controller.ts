@@ -2,11 +2,11 @@ import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, UseFilters,
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
-import { Article } from './article.model';
+import { Article } from '@model/article.model';
 import { createArticleDto, updateArticleDto } from './article.dto';
-import { ArticleService } from './article.service';
+import { ArticleService } from '@services/article.service';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { RolesGuard } from 'src/guard/roles.guard';
 
 /**
  * @return 文章列表

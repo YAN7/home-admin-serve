@@ -1,12 +1,12 @@
 import { Strategy, IStrategyOptions } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectModel } from 'nestjs-typegoose';
-import { User } from './user.model';
+import { User } from '@model/user.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { BadRequestException } from '@nestjs/common';
 import { compareSync } from 'bcryptjs';
 
-export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
+export default class LocalStrategy extends PassportStrategy(Strategy, 'local') {
 	constructor(
 		@InjectModel(User) private readonly UserModel: ModelType<User>
 	) {

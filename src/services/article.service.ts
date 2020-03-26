@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Article } from './article.model';
+import { Article } from '@model/article.model';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 

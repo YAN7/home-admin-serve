@@ -9,7 +9,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@model/*": ["src/model/*"],
+      "@services/*": ["src/services/*"],
+      "@router/*": ["src/router/*"],
+      "@strategy": ["src/strategy/index"],
+    }
   },
   "exclude": ["node_modules", "dist"]
 }

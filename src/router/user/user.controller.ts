@@ -2,17 +2,17 @@ import { Controller, Post, Body, Get, Param, UseGuards, Req, SetMetadata } from 
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
-import { User, UserDocument } from './user.model';
+import { User, UserDocument } from '@model/user.model';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { CurrentUser } from 'src/current-user.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { RolesGuard } from 'src/guard/roles.guard';
 import { UserDto } from './user.dto';
+
 
 @Controller('user')
 @ApiTags('用户')
 export class UserController {
-
 	constructor(
 		@InjectModel(User) private readonly UserModel: ModelType<User>,
 		private jwtService: JwtService

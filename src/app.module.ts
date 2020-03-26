@@ -4,9 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BlogController } from './blog/blog.controller';
-import { BlogModule } from './blog/blog.module';
-import { UserModule } from './user/user.module';
+import { BlogModule } from '@router/blog/blog.module';
+import { UserModule } from '@router/user/user.module';
 
 @Global()
 @Module({
@@ -20,7 +19,6 @@ import { UserModule } from './user/user.module';
     JwtModule.registerAsync({
       useFactory() {
         return {
-          // secret: '123',
           secret: process.env.SECRET,
         }
       }
@@ -28,7 +26,7 @@ import { UserModule } from './user/user.module';
     BlogModule,
     UserModule,
   ],
-  controllers: [AppController, BlogController],
+  controllers: [AppController],
   providers: [AppService],
   exports: [JwtModule]
 })

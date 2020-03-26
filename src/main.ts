@@ -3,8 +3,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { TransformInterceptor } from './interceptors/transform.interceptor';
-import { HttpExceptionFilter } from './filters/exception.filter';
+import { TransformInterceptor } from './interceptor/transform.interceptor';
+import { HttpExceptionFilter } from './filter/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
