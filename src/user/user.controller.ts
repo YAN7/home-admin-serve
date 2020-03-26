@@ -1,12 +1,13 @@
-import { Controller, Post, Body, Get, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, UseGuards, Req, SetMetadata } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { UserDto } from './user.dto';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { User, UserDocument } from './user.model';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { CurrentUser } from 'src/current-user.decorator';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { UserDto } from './user.dto';
 
 @Controller('user')
 @ApiTags('用户')
@@ -21,14 +22,13 @@ export class UserController {
 	 * @description 注册用户
 	 */
 	@Post('register')
+	@SetMetadata('roles', ['admin'])
+	@UseGuards(AuthGuard('jwt'), RolesGuard)
 	@ApiOperation({ summary: '注册' })
+	@ApiBearerAuth()
 	async register(@Body() dto: UserDto) {
 		const { username, password } = dto;
-		const user = await this.UserModel.create({
-			username, 
-			password
-
-		})
+		const user = await this.UserModel.create({ username,  password })
 		return user;
 	}
 
@@ -37,9 +37,11 @@ export class UserController {
 	 */
 	@Post('login')
 	@ApiOperation({ summary: '登陆' })
-	@UseGuards(AuthGuard('local'))
+	@UseGuards(AuthGuard('local'), RolesGuard)
 	async login(@Body() dto: UserDto, @Req() req) {
 		return {
+			success: true,
+			code: 200,
 			token: this.jwtService.sign(String(req.user._id)),
 		}
 	}
@@ -48,7 +50,7 @@ export class UserController {
 	 * @description 获取用户信息
 	 */
 	@Get('user')
-	@UseGuards(AuthGuard('jwt'))
+	@UseGuards(AuthGuard('jwt'), RolesGuard)
 	@ApiOperation({ summary: '获取用户信息' })
 	@ApiBearerAuth()
 	async user(@CurrentUser() user: UserDocument) {

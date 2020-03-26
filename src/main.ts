@@ -3,15 +3,16 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { TransformInterceptor } from './interceptors/transform.interceptor';
+import { HttpExceptionFilter } from './filters/exception.filter';
 
 async function bootstrap() {
-  // mongoose.connect('mongodb://localhost/blog-api', {
-  //   useNewUrlParser: true,
-  //   useFindAndModify: false,
-  //   useCreateIndex: true,
-  // }).then(() => console.log('连接成功'));
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe())
+  app
+    .useGlobalPipes(new ValidationPipe())
+    .useGlobalInterceptors(new TransformInterceptor())
+    .useGlobalFilters(new HttpExceptionFilter())
+    .enableCors();
   const options = new DocumentBuilder()
     .setTitle('个人后台')
     .setDescription('个人后台服务系统')

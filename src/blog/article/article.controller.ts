@@ -1,25 +1,29 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, UseFilters, UseInterceptors } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { Article } from './article.model';
-import { createArticleDto } from './article.dto';
-
-
+import { createArticleDto, updateArticleDto } from './article.dto';
+import { ArticleService } from './article.service';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 /**
  * @return 文章列表
  */
 @Controller('blog/article')
+// @UseGuards(AuthGuard('jwt'), RolesGuard)
 @ApiTags('文章')
+@ApiBearerAuth()
 export class ArticleController {
 	constructor(
-		@InjectModel(Article) private readonly ArticleModel: ModelType<Article>
+		@InjectModel(Article) private readonly ArticleModel: ModelType<Article>,
+		private readonly articleService: ArticleService,
 	) {}
 	@Get()
 	@ApiOperation({ summary: '文章列表' })
 	async index() {
-		return await this.ArticleModel.find();
+		return await this.articleService.findAll();
 	}
 
 	/**
@@ -29,7 +33,7 @@ export class ArticleController {
 	@Post()
 	@ApiOperation({ summary: '创建文章' })
 	async create(@Body() createDto:createArticleDto ) {
-		await this.ArticleModel.create(createDto);
+		await this.articleService.create(createDto);
 		return createDto;
 	}
 
@@ -50,8 +54,8 @@ export class ArticleController {
 	 */
 	@Put(':id')
 	@ApiOperation({ summary: '编辑文章' })
-	async update(@Param('id') id: string, @Body() updateDto: createArticleDto) {
-		const res = await this.ArticleModel.findByIdAndUpdate(id, updateDto);
+	async update(@Param('id') id: string, @Body() updateDto: updateArticleDto) {
+		const res = await this.articleService.update(id, updateDto);
 		return res;
 	}
 
@@ -61,7 +65,7 @@ export class ArticleController {
 	@Delete(':id')
 	@ApiOperation({ summary: '删除文章' })
 	async remove(@Param('id') id) {
-		await this.ArticleModel.findByIdAndDelete(id);
+		await this.articleService.remove(id);
 		return {
 			success: true
 		}
