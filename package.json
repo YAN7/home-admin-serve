@@ -31,7 +31,7 @@
     "@types/mongoose": "^5.7.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.11.0",
+    "class-validator": "^0.14.0",
     "mongoose": "^5.8.11",
     "nestjs-typegoose": "^7.0.0",
     "passport": "^0.4.1",
